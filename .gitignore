@@ -1,0 +1,7 @@
+Debug/
+Release/
+.vs/
+x64/
+
+**/bin/
+**/obj/
