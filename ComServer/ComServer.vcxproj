@@ -163,6 +163,12 @@
   <ItemGroup>
     <None Include="Exports.def" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="ComServer.X.manifest"/>
+    <Content Include="ComServer.X.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
