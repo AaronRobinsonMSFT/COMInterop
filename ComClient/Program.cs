@@ -37,13 +37,37 @@
 
     class Program
     {
+        static IServer[] Servers = new IServer[8];
+
+        void AccessServers()
+        {
+            foreach (var s in Servers)
+            {
+                var pi = s.ComputePi();
+                Console.WriteLine($"PI: {pi}");
+            }
+        }
+
+        [STAThread]
         static void Main(string[] args)
         {
             // Activate COM server
-            var server = (IServer)new ServerClass();
+            for (int i = 0; i < Servers.Length; ++i)
+            {
+                Servers[i] = (IServer)new ServerClass();
+            }
 
-            var pi = server.ComputePi();
-            Console.WriteLine($"PI: {pi}");
+            new Program().AccessServers();
+
+            // Null out all references or else the GC won't collect RCWs
+            Servers = null;
+
+            GC.Collect();
+            GC.Collect();
+
+            // In mixed mode debugging, the final release for the COM objects
+            // can be observed with WaitForPendingFinalizers() on the stack.
+            GC.WaitForPendingFinalizers();
         }
     }
 }
