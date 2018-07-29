@@ -16,7 +16,7 @@
 
 #pragma warning disable IDE1006 // Naming Styles
     /// <summary>
-    /// Managed definition of CoClass 
+    /// Managed definition of CoClass
     /// </summary>
     [ComImport]
     [CoClass(typeof(ServerClass))]
@@ -40,10 +40,10 @@
         static void Main(string[] args)
         {
             // Activate COM server
-            var server = (IServer)new ServerClass();
+            var server = (Server)new ServerClass();
 
             var pi = server.ComputePi();
-            Console.WriteLine($"PI: {pi}");
+            Console.WriteLine($"\u03C0 = {pi}");
         }
     }
 }
