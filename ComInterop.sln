@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComServer", "ComServer\ComServer.vcxproj", "{693824CA-5F5D-4714-9212-53799CAF3A9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComClient", "ComClient\ComClient.csproj", "{DF58A8FB-0C4E-4499-B06F-5843ECEB5A63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetClient", "NetClient\NetClient.csproj", "{DF58A8FB-0C4E-4499-B06F-5843ECEB5A63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComClient_RegFree", "ComClient_RegFree\ComClient_RegFree.csproj", "{AE87BBA2-0A6B-4EDD-B10F-4D50DCFD25C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetClient_RegFree", "NetClient_RegFree\NetClient_RegFree.csproj", "{AE87BBA2-0A6B-4EDD-B10F-4D50DCFD25C4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{693824CA-5F5D-4714-9212-53799CAF3A9A} = {693824CA-5F5D-4714-9212-53799CAF3A9A}
 	EndProjectSection

@@ -1,4 +1,4 @@
-﻿namespace ComClient
+﻿namespace NetClient
 {
     using System;
     using System.Runtime.InteropServices;
