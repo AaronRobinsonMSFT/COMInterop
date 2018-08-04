@@ -45,7 +45,10 @@ int main()
     ::CoUninitialize();
 
     if (FAILED(hr))
+    {
+        ::printf("Failure: 0x%08x\n", hr);
         return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }

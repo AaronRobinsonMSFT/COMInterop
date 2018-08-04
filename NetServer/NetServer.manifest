@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+  type="win32"
+  name="NetServer"
+  version="1.0.0.0" />
+
+<clrClass
+    clsid="{114383E9-1969-47D2-9AA9-91388C961A19}"
+    name="NetServer.Server"
+    threadingModel="Both"
+    runtimeVersion="v4.0.30319">
+</clrClass>
+
+</assembly>

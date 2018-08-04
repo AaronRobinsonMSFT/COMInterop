@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComServer", "ComServer\ComServer.vcxproj", "{693824CA-5F5D-4714-9212-53799CAF3A9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetClient", "NetClient\NetClient.csproj", "{DF58A8FB-0C4E-4499-B06F-5843ECEB5A63}"
+	ProjectSection(ProjectDependencies) = postProject
+		{693824CA-5F5D-4714-9212-53799CAF3A9A} = {693824CA-5F5D-4714-9212-53799CAF3A9A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetClient_RegFree", "NetClient_RegFree\NetClient_RegFree.csproj", "{AE87BBA2-0A6B-4EDD-B10F-4D50DCFD25C4}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -15,6 +18,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetServer", "NetServer\NetServer.csproj", "{8F7988CB-2824-4479-B8A1-DD07BABDF957}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComClient", "ComClient\ComClient.vcxproj", "{E34CE8A4-4A28-4AE1-B825-8BC1EC0093EC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8F7988CB-2824-4479-B8A1-DD07BABDF957} = {8F7988CB-2824-4479-B8A1-DD07BABDF957}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComClient_RegFree", "ComClient_RegFree\ComClient_RegFree.vcxproj", "{0C44BFE0-DB17-455A-BD8A-76249F941A40}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8F7988CB-2824-4479-B8A1-DD07BABDF957} = {8F7988CB-2824-4479-B8A1-DD07BABDF957}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +95,16 @@ Global
 		{E34CE8A4-4A28-4AE1-B825-8BC1EC0093EC}.Release|x64.Build.0 = Release|x64
 		{E34CE8A4-4A28-4AE1-B825-8BC1EC0093EC}.Release|x86.ActiveCfg = Release|Win32
 		{E34CE8A4-4A28-4AE1-B825-8BC1EC0093EC}.Release|x86.Build.0 = Release|Win32
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Debug|x64.ActiveCfg = Debug|x64
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Debug|x64.Build.0 = Debug|x64
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Debug|x86.ActiveCfg = Debug|Win32
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Debug|x86.Build.0 = Debug|Win32
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Release|Any CPU.ActiveCfg = Release|Win32
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Release|x64.ActiveCfg = Release|x64
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Release|x64.Build.0 = Release|x64
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Release|x86.ActiveCfg = Release|Win32
+		{0C44BFE0-DB17-455A-BD8A-76249F941A40}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
