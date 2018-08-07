@@ -41,3 +41,9 @@ Running the RegFree Net server with COM client example:
 2) Build desired solution configuration (e.g. `Debug|x86`)
 3) Set the `ComClient_RegFree` project as the StartUp project
 4) Press "F5" from within Visual Studio to debug
+
+## References
+
+[RegFree COM Walkthrough](https://msdn.microsoft.com/en-us/library/ms973913.aspx)
+
+[RegFree COM with .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/interop/configure-net-framework-based-com-components-for-reg)
