@@ -3,11 +3,19 @@
 #include <Windows.h>
 #include <atlbase.h>
 
+struct Floats
+{
+    float i;
+    float j;
+};
+
 // IServer definition
 DECLARE_INTERFACE_IID_(IServer, IUnknown, "F38720E5-2D64-445E-88FB-1D696F614C78")
 {
     // Compute and return the value of PI
     STDMETHOD(ComputePi)(_Out_ double *pi) PURE;
+
+    virtual COM_DECLSPEC_NOTHROW Floats STDMETHODCALLTYPE GetFloats() PURE;
 };
 
 // Server implementation of IServer
@@ -15,6 +23,12 @@ class DECLSPEC_UUID("114383E9-1969-47D2-9AA9-91388C961A19") Server : IServer
 {
 public: // IServer
     STDMETHOD(ComputePi)(_Out_ double *pi);
+
+    virtual COM_DECLSPEC_NOTHROW Floats STDMETHODCALLTYPE GetFloats()
+    {
+        Floats f{ 1.6f, 3.2f };
+        return f;
+    }
 
 public: // IUnknown
     STDMETHOD(QueryInterface)(

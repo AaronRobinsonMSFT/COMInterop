@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>true</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -64,7 +64,7 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(SolutionDir)\$(ConfigurationName)\ComServer.X.manifest" "$(TargetDir)"
-copy /y "$(SolutionDir)\$(ConfigurationName)\ComServer.dll" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>copy /y "$(SolutionDir)\x64\$(ConfigurationName)\ComServer.X.manifest" "$(TargetDir)"
+copy /y "$(SolutionDir)\x64\$(ConfigurationName)\ComServer.dll" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

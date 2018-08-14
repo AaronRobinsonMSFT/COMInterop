@@ -3,6 +3,13 @@
     using System;
     using System.Runtime.InteropServices;
 
+    [StructLayout(LayoutKind.Sequential)]
+    struct Floats
+    {
+        public float i;
+        public float j;
+    }
+
     /// <summary>
     /// Managed definition of COM interface
     /// </summary>
@@ -12,6 +19,9 @@
     internal interface IServer
     {
         double ComputePi();
+
+        //[PreserveSig]
+        Floats GetFloats();
     }
 
 #pragma warning disable IDE1006 // Naming Styles
@@ -42,8 +52,11 @@
             // Activate COM server
             var server = (Server)new ServerClass();
 
-            var pi = server.ComputePi();
-            Console.WriteLine($"\u03C0 = {pi}");
+            //var pi = server.ComputePi();
+            //Console.WriteLine($"\u03C0 = {pi}");
+
+            var floats = server.GetFloats();
+            Console.WriteLine($"Floats => {floats.i} | {floats.j}");
         }
     }
 }
