@@ -1,0 +1,8 @@
+EXPORTS
+    DllGetClassObject           PRIVATE
+    DllCanUnloadNow             PRIVATE
+
+    ; MSCOREE Forwarders
+    CreateConfigStream          PRIVATE
+    Ordinal24                   @24
+    GetProcessExecutableHeap    PRIVATE
