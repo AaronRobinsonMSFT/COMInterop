@@ -3,6 +3,62 @@
 #include <Windows.h>
 #include <atlbase.h>
 
+// IOuter definition
+DECLARE_INTERFACE_IID_(IOuter, IUnknown, "575375A2-3F92-44A8-89A3-A7BB87BE9622")
+{
+    // Compute and return the request Fibonacci number
+    STDMETHOD(ComputeFibonacci)(_In_ int n, _Out_ int *fib) PURE;
+};
+
+// Server implementation of IOuter
+class DECLSPEC_UUID("BCF98F86-300D-4245-82F2-3D9D1E62B1FC") Outer : IOuter
+{
+public: // IOuter
+    STDMETHOD(ComputeFibonacci)(_In_ int n, _Out_ int *fib);
+
+public: // IUnknown
+    STDMETHOD(QueryInterface)(
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ _COM_Outptr_ void __RPC_FAR *__RPC_FAR *ppvObject)
+    {
+        if (ppvObject == nullptr)
+            return E_POINTER;
+
+        if (riid == __uuidof(IUnknown))
+        {
+            *ppvObject = static_cast<IUnknown *>(this);
+        }
+        else if (riid == __uuidof(IOuter))
+        {
+            *ppvObject = static_cast<IOuter *>(this);
+        }
+        else
+        {
+            *ppvObject = nullptr;
+            return E_NOINTERFACE;
+        }
+
+        AddRef();
+        return S_OK;
+    }
+
+    STDMETHOD_(ULONG, AddRef)(void)
+    {
+        return ::InterlockedIncrement(&_refCount);
+    }
+
+    STDMETHOD_(ULONG, Release)(void)
+    {
+        ULONG c = ::InterlockedDecrement(&_refCount);
+        if (c == 0)
+            delete this;
+        return c;
+    }
+
+private:
+    ULONG _refCount = 1;
+};
+
 // IServer definition
 DECLARE_INTERFACE_IID_(IServer, IUnknown, "F38720E5-2D64-445E-88FB-1D696F614C78")
 {

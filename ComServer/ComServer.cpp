@@ -1,6 +1,38 @@
 ﻿#include "stdafx.h"
 #include "ComServer.h"
 
+HRESULT STDMETHODCALLTYPE Outer::ComputeFibonacci(_In_ int n, _Out_ int *fib)
+{
+    if (fib == nullptr)
+        return E_POINTER;
+
+    if (n < 0 || 46 < n)
+        return E_INVALIDARG;
+
+    if (n == 0 || n == 1)
+    {
+        *fib = n;
+    }
+    else
+    {
+        int p = 0;
+        int c = 1;
+
+        while (n >= 2)
+        {
+            int t = c;
+            c = c + p;
+            p = t;
+
+            --n;
+        }
+
+        *fib = c;
+    }
+
+    return S_OK;
+}
+
 HRESULT STDMETHODCALLTYPE Server::ComputePi(_Out_ double *pi)
 {
     if (pi == nullptr)

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Reflection;
     using System.Runtime.InteropServices;
 
@@ -96,14 +95,28 @@
                 ref Guid riid,
                 [MarshalAs(UnmanagedType.Interface)] out object ppvObject)
             {
-                Debug.Assert(pUnkOuter == null);
-
                 // Verify the class implements the desired interface
                 foreach (Type i in this.ClassType.GetInterfaces())
                 {
                     if (i.GUID == riid)
                     {
                         ppvObject = Activator.CreateInstance(this.ClassType);
+
+                        if (pUnkOuter != null)
+                        {
+                            try
+                            {
+                                IntPtr outerPtr = Marshal.GetIUnknownForObject(pUnkOuter);
+                                IntPtr innerPtr = Marshal.CreateAggregatedObject(outerPtr, ppvObject);
+                                ppvObject = Marshal.GetObjectForIUnknown(innerPtr);
+                            }
+                            finally
+                            {
+                                // Decrement the above 'Marshal.GetIUnknownForObject()'
+                                Marshal.ReleaseComObject(pUnkOuter);
+                            }
+                        }
+
                         return;
                     }
                 }

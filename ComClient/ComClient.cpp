@@ -4,6 +4,13 @@
 
 using namespace ATL;
 
+// IOuter definition
+DECLARE_INTERFACE_IID_(IOuter, IUnknown, "575375A2-3F92-44A8-89A3-A7BB87BE9622")
+{
+    // Compute and return the request Fibonacci number
+    STDMETHOD(ComputeFibonacci)(_In_ int n, _Out_ int *fib) PURE;
+};
+
 // IServer definition
 DECLARE_INTERFACE_IID_(IServer, IUnknown, "F38720E5-2D64-445E-88FB-1D696F614C78")
 {
@@ -30,6 +37,111 @@ HRESULT QueryServer()
 
     ::printf("\u03C0 = %f\n", pi);
 
+    CComPtr<IOuter> outer;
+    hr = server.QueryInterface(&outer);
+    if (FAILED(hr))
+        return hr;
+
+    int fibn = 10;
+    int fibResult;
+    hr = outer->ComputeFibonacci(fibn, &fibResult);
+    if (FAILED(hr))
+        return hr;
+
+    ::printf("fib(%d) = %d\n", fibn, fibResult);
+
+    // Check for proper aggregation - IUnknowns should match
+    CComPtr<IUnknown> outerUnk;
+    hr = outer.QueryInterface(&outerUnk);
+    if (FAILED(hr))
+        return hr;
+
+    CComPtr<IUnknown> outerUnkMaybe;
+    hr = server.QueryInterface(&outerUnkMaybe);
+    if (FAILED(hr))
+        return hr;
+
+    if (outerUnk.p != outerUnkMaybe.p)
+        return E_UNEXPECTED;
+
+    return S_OK;
+}
+
+class OuterServer : public IUnknown
+{
+public: // IUnknown
+    STDMETHOD(QueryInterface)(
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ _COM_Outptr_ void __RPC_FAR *__RPC_FAR *ppvObject)
+    {
+        if (ppvObject == nullptr)
+            return E_POINTER;
+
+        if (riid == __uuidof(IUnknown))
+        {
+            *ppvObject = static_cast<IUnknown *>(this);
+        }
+        else
+        {
+            *ppvObject = nullptr;
+            return E_NOINTERFACE;
+        }
+
+        AddRef();
+        return S_OK;
+    }
+
+    STDMETHOD_(ULONG, AddRef)(void)
+    {
+        return ::InterlockedIncrement(&_refCount);
+    }
+
+    STDMETHOD_(ULONG, Release)(void)
+    {
+        ULONG c = ::InterlockedDecrement(&_refCount);
+        if (c == 0)
+            delete this;
+        return c;
+    }
+
+private:
+    ULONG _refCount = 1;
+};
+
+HRESULT QueryServer_Aggregation()
+{
+    CComPtr<OuterServer> outer;
+    outer.Attach(new OuterServer());
+
+    CComPtr<IServer> server;
+    HRESULT hr = ::CoCreateInstance(CLSID_Server, outer, CLSCTX_INPROC, IID_IServer, (void**)&server);
+    if (FAILED(hr))
+        return hr;
+
+    double pi;
+    hr = server->ComputePi(&pi);
+    if (FAILED(hr))
+        return hr;
+
+    ::printf("\u03C0 = %f\n", pi);
+
+    // Check for proper aggregation - IUnknowns should match
+    if (outer != nullptr)
+    {
+        CComPtr<IUnknown> outerUnk;
+        hr = outer.QueryInterface(&outerUnk);
+        if (FAILED(hr))
+            return hr;
+
+        CComPtr<IUnknown> outerUnkMaybe;
+        hr = server.QueryInterface(&outerUnkMaybe);
+        if (FAILED(hr))
+            return hr;
+
+        if (outerUnk.p != outerUnkMaybe.p)
+            return E_UNEXPECTED;
+    }
+
     return S_OK;
 }
 
@@ -52,4 +164,3 @@ int main()
 
     return EXIT_SUCCESS;
 }
-
