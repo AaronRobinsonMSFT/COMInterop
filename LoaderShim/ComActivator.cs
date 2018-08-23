@@ -63,6 +63,7 @@
         [ComVisible(true)]
         internal class BasicClassFactory : IClassFactory
         {
+            private static readonly Guid Clsid_IUnknown = new Guid("00000000-0000-0000-C000-000000000046");
             private readonly Guid ClassId;
             private readonly Type ClassType;
             private readonly Assembly ClassAssembly;
@@ -95,34 +96,42 @@
                 ref Guid riid,
                 [MarshalAs(UnmanagedType.Interface)] out object ppvObject)
             {
-                // Verify the class implements the desired interface
-                foreach (Type i in this.ClassType.GetInterfaces())
+                if (riid != Clsid_IUnknown)
                 {
-                    if (i.GUID == riid)
+                    bool found = false;
+
+                    // Verify the class implements the desired interface
+                    foreach (Type i in this.ClassType.GetInterfaces())
                     {
-                        ppvObject = Activator.CreateInstance(this.ClassType);
-
-                        if (pUnkOuter != null)
+                        if (i.GUID == riid)
                         {
-                            try
-                            {
-                                IntPtr outerPtr = Marshal.GetIUnknownForObject(pUnkOuter);
-                                IntPtr innerPtr = Marshal.CreateAggregatedObject(outerPtr, ppvObject);
-                                ppvObject = Marshal.GetObjectForIUnknown(innerPtr);
-                            }
-                            finally
-                            {
-                                // Decrement the above 'Marshal.GetIUnknownForObject()'
-                                Marshal.ReleaseComObject(pUnkOuter);
-                            }
+                            found = true;
+                            break;
                         }
+                    }
 
-                        return;
+                    if (!found)
+                    {
+                        // E_NOINTERFACE
+                        throw new InvalidCastException();
                     }
                 }
 
-                // E_NOINTERFACE
-                throw new InvalidCastException();
+                ppvObject = Activator.CreateInstance(this.ClassType);
+                if (pUnkOuter != null)
+                {
+                    try
+                    {
+                        IntPtr outerPtr = Marshal.GetIUnknownForObject(pUnkOuter);
+                        IntPtr innerPtr = Marshal.CreateAggregatedObject(outerPtr, ppvObject);
+                        ppvObject = Marshal.GetObjectForIUnknown(innerPtr);
+                    }
+                    finally
+                    {
+                        // Decrement the above 'Marshal.GetIUnknownForObject()'
+                        Marshal.ReleaseComObject(pUnkOuter);
+                    }
+                }
             }
 
             void IClassFactory.LockServer([MarshalAs(UnmanagedType.Bool)] bool fLock)

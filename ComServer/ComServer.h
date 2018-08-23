@@ -2,6 +2,28 @@
 
 #include <Windows.h>
 #include <atlbase.h>
+#include <exception>
+
+template<typename T>
+inline HRESULT CreateInstanceImpl(_In_opt_ IUnknown *outer, _In_  REFIID riid, _Outptr_ T **inst)
+{
+    if (inst == nullptr)
+        return E_POINTER;
+
+    if (outer != nullptr)
+        return CLASS_E_NOAGGREGATION;
+
+    try
+    {
+        *inst = new T();
+    }
+    catch (const std::bad_alloc&)
+    {
+        return E_OUTOFMEMORY;
+    }
+
+    return S_OK;
+}
 
 // IOuter definition
 DECLARE_INTERFACE_IID_(IOuter, IUnknown, "575375A2-3F92-44A8-89A3-A7BB87BE9622")
@@ -11,10 +33,31 @@ DECLARE_INTERFACE_IID_(IOuter, IUnknown, "575375A2-3F92-44A8-89A3-A7BB87BE9622")
 };
 
 // Server implementation of IOuter
-class DECLSPEC_UUID("BCF98F86-300D-4245-82F2-3D9D1E62B1FC") Outer : IOuter
+class DECLSPEC_UUID("BCF98F86-300D-4245-82F2-3D9D1E62B1FC") Outer : IUnknown
 {
-public: // IOuter
-    STDMETHOD(ComputeFibonacci)(_In_ int n, _Out_ int *fib);
+public: // Outer
+    Outer(_In_opt_ IUnknown *outer)
+        : _pUnkOuter{ outer }
+        , _iOuterImpl{}
+    {
+        _iOuterImpl._pUnkOuter = outer;
+    }
+
+private: // impl
+    class OuterImpl : IOuter
+    {
+        friend class Outer;
+        IUnknown *_pUnkOuter;
+    public: // IOuter
+        STDMETHOD(ComputeFibonacci)(_In_ int n, _Out_ int *fib);
+
+    public: // IUnknown
+        STDMETHODIMP QueryInterface(REFIID riid, void** ppv) { return _pUnkOuter->QueryInterface(riid, ppv); };
+        STDMETHOD_(ULONG, AddRef)(void) { return _pUnkOuter->AddRef(); };
+        STDMETHOD_(ULONG, Release)(void) { return _pUnkOuter->Release(); };
+    };
+
+    OuterImpl _iOuterImpl;
 
 public: // IUnknown
     STDMETHOD(QueryInterface)(
@@ -30,7 +73,7 @@ public: // IUnknown
         }
         else if (riid == __uuidof(IOuter))
         {
-            *ppvObject = static_cast<IOuter *>(this);
+            *ppvObject = &_iOuterImpl;
         }
         else
         {
@@ -38,7 +81,7 @@ public: // IUnknown
             return E_NOINTERFACE;
         }
 
-        AddRef();
+        ((IUnknown*)*ppvObject)->AddRef();
         return S_OK;
     }
 
@@ -56,8 +99,30 @@ public: // IUnknown
     }
 
 private:
+    IUnknown* _pUnkOuter;
     ULONG _refCount = 1;
 };
+
+template<>
+inline HRESULT CreateInstanceImpl<Outer>(_In_opt_ IUnknown *outer, _In_  REFIID riid, _Outptr_ Outer **inst)
+{
+    if (inst == nullptr)
+        return E_POINTER;
+
+    if (outer != nullptr && riid != IID_IUnknown)
+        return CLASS_E_NOAGGREGATION;
+
+    try
+    {
+        *inst = new Outer(outer);
+    }
+    catch (const std::bad_alloc&)
+    {
+        return E_OUTOFMEMORY;
+    }
+
+    return S_OK;
+}
 
 // IServer definition
 DECLARE_INTERFACE_IID_(IServer, IUnknown, "F38720E5-2D64-445E-88FB-1D696F614C78")
@@ -140,19 +205,12 @@ public: // IClassFactory
         _In_  REFIID riid,
         _COM_Outptr_  void **ppvObject)
     {
-        if (pUnkOuter != nullptr)
-            return CLASS_E_NOAGGREGATION;
+        ATL::CComPtr<T> inst;
+        HRESULT hr = CreateInstanceImpl<T>(pUnkOuter, riid, &inst);
+        if (FAILED(hr))
+            return hr;
 
-        try
-        {
-            ATL::CComPtr<T> inst;
-            inst.Attach(new T());
-            return inst->QueryInterface(riid, ppvObject);
-        }
-        catch (const std::bad_alloc &)
-        {
-            return E_OUTOFMEMORY;
-        }
+        return inst->QueryInterface(riid, ppvObject);
     }
 
     STDMETHOD(LockServer)(/* [in] */ BOOL fLock)

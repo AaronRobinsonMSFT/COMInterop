@@ -23,22 +23,10 @@ const IID IID_IServer = __uuidof(IServer);
 // {114383E9-1969-47D2-9AA9-91388C961A19}
 const CLSID CLSID_Server = { 0x114383E9, 0x1969, 0x47D2, { 0x9A, 0xA9, 0x91, 0x38, 0x8C, 0x96, 0x1A, 0x19 } };
 
-HRESULT QueryServer()
+HRESULT CallOuter(_In_ IUnknown *o, _Outptr_ IOuter **r)
 {
-    CComPtr<IServer> server;
-    HRESULT hr = ::CoCreateInstance(CLSID_Server, nullptr, CLSCTX_INPROC, IID_IServer, (void**)&server);
-    if (FAILED(hr))
-        return hr;
-
-    double pi;
-    hr = server->ComputePi(&pi);
-    if (FAILED(hr))
-        return hr;
-
-    ::printf("\u03C0 = %f\n", pi);
-
     CComPtr<IOuter> outer;
-    hr = server.QueryInterface(&outer);
+    HRESULT hr = o->QueryInterface(&outer);
     if (FAILED(hr))
         return hr;
 
@@ -49,6 +37,43 @@ HRESULT QueryServer()
         return hr;
 
     ::printf("fib(%d) = %d\n", fibn, fibResult);
+    *r = outer.Detach();
+    return S_OK;
+}
+
+HRESULT CallServer(_In_ IUnknown *s, _Outptr_ IServer **r)
+{
+    CComPtr<IServer> server;
+    HRESULT hr = s->QueryInterface(&server);
+    if (FAILED(hr))
+        return hr;
+
+    double pi;
+    hr = server->ComputePi(&pi);
+    if (FAILED(hr))
+        return hr;
+
+    ::printf("\u03C0 = %f\n", pi);
+    *r = server.Detach();
+    return S_OK;
+}
+
+HRESULT QueryServer()
+{
+    CComPtr<IUnknown> inst;
+    HRESULT hr = ::CoCreateInstance(CLSID_Server, nullptr, CLSCTX_INPROC, IID_IUnknown, (void**)&inst);
+    if (FAILED(hr))
+        return hr;
+
+    CComPtr<IServer> server;
+    hr = CallServer(inst, &server);
+    if (FAILED(hr))
+        return hr;
+
+    CComPtr<IOuter> outer;
+    hr = CallOuter(inst, &outer);
+    if (FAILED(hr))
+        return hr;
 
     // Check for proper aggregation - IUnknowns should match
     CComPtr<IUnknown> outerUnk;
@@ -110,37 +135,43 @@ private:
 
 HRESULT QueryServer_Aggregation()
 {
-    CComPtr<OuterServer> outer;
-    outer.Attach(new OuterServer());
+    CComPtr<OuterServer> outerServer;
+    outerServer.Attach(new OuterServer());
+
+    CComPtr<IUnknown> inst;
+    HRESULT hr = ::CoCreateInstance(CLSID_Server, outerServer, CLSCTX_INPROC, IID_IUnknown, (void**)&inst);
+    if (FAILED(hr))
+        return hr;
 
     CComPtr<IServer> server;
-    HRESULT hr = ::CoCreateInstance(CLSID_Server, outer, CLSCTX_INPROC, IID_IServer, (void**)&server);
+    hr = CallServer(inst, &server);
     if (FAILED(hr))
         return hr;
 
-    double pi;
-    hr = server->ComputePi(&pi);
+    CComPtr<IOuter> outer;
+    hr = CallOuter(inst, &outer);
     if (FAILED(hr))
         return hr;
-
-    ::printf("\u03C0 = %f\n", pi);
 
     // Check for proper aggregation - IUnknowns should match
-    if (outer != nullptr)
-    {
-        CComPtr<IUnknown> outerUnk;
-        hr = outer.QueryInterface(&outerUnk);
-        if (FAILED(hr))
-            return hr;
+    CComPtr<IUnknown> outerUnk;
+    hr = outerServer.QueryInterface(&outerUnk);
+    if (FAILED(hr))
+        return hr;
 
-        CComPtr<IUnknown> outerUnkMaybe;
-        hr = server.QueryInterface(&outerUnkMaybe);
-        if (FAILED(hr))
-            return hr;
+    CComPtr<IUnknown> outerUnkMaybe1;
+    hr = outer.QueryInterface(&outerUnkMaybe1);
+    if (FAILED(hr))
+        return hr;
 
-        if (outerUnk.p != outerUnkMaybe.p)
-            return E_UNEXPECTED;
-    }
+    CComPtr<IUnknown> outerUnkMaybe2;
+    hr = server.QueryInterface(&outerUnkMaybe2);
+    if (FAILED(hr))
+        return hr;
+
+    if (outerUnk.p != outerUnkMaybe1.p
+        || outerUnk.p != outerUnkMaybe2.p)
+        return E_UNEXPECTED;
 
     return S_OK;
 }

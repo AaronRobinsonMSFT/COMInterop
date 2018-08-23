@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "ComServer.h"
 
-HRESULT STDMETHODCALLTYPE Outer::ComputeFibonacci(_In_ int n, _Out_ int *fib)
+HRESULT STDMETHODCALLTYPE Outer::OuterImpl::ComputeFibonacci(_In_ int n, _Out_ int *fib)
 {
     if (fib == nullptr)
         return E_POINTER;
