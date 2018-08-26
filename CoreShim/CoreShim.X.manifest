@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+  type="win32"
+  name="CoreShim.X"
+  version="1.0.0.0" />
+
+<file name="CoreShim.dll">
+  <!-- Shim 'provides' managed class, but implementation is actually in managed assembly not shim -->
+  <comClass
+    clsid="{114383E9-1969-47D2-9AA9-91388C961A19}"
+    threadingModel="Both" />
+</file>
+
+</assembly>

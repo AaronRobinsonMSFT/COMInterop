@@ -42,8 +42,25 @@ Running the RegFree Net server with COM client example:
 3) Set the `ComClient_RegFree` project as the StartUp project
 4) Press "F5" from within Visual Studio to debug
 
+Running the RegFree Net Core Server with COM client example:
+
+1) Load ComInterop.sln in Visual Studio
+2) Build desired solution configuration (e.g. `Debug|x64`)
+    * Only x64 configurations are supported
+3) Set the `ComClient_RegFree_Core` project as the StartUp project
+4) Open project properties and select the 'Debugging' page
+5) Change the working directory from `$(ProjectDir)` to `$(TargetDir)`
+6) Set the `CORE_ROOT` environment variable to the absolute path of the desired .NET Core framework
+    * i.e. `CORE_ROOT=C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.2`
+7) Apply changes and close project properties
+8) Press "F5" from within Visual Studio to debug
+
 ## References
 
 [RegFree COM Walkthrough](https://msdn.microsoft.com/en-us/library/ms973913.aspx)
 
 [RegFree COM with .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/interop/configure-net-framework-based-com-components-for-reg)
+
+[Hosting .NET Core on Unix](https://docs.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting#about-hosting-net-core-on-unix)
+
+[COM Activation in .NET Core proposal](https://github.com/dotnet/core-setup/pull/4476)
