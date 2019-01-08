@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+    <!-- Reference the app local TLB for the server.
+         Observe the fact that the project has the TLB in its output directory -->
+    <file name="NetServer.tlb">
+        <typelib
+            tlbid="{8F7988CB-2824-4479-B8A1-DD07BABDF957}"
+            version="1.0"
+            helpdir=""/>
+    </file>
+
+    <!-- Define the proxy (PSOAInterface - default interface proxy/stub of OleAutomation) to use for the remote instance of the server -->
+    <comInterfaceExternalProxyStub
+        iid="{F38720E5-2D64-445E-88FB-1D696F614C78}"
+        name="IServer"
+        tlbid="{8F7988CB-2824-4479-B8A1-DD07BABDF957}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}" />
+</assembly>

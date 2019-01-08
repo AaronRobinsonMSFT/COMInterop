@@ -1,10 +1,10 @@
 # COM Interop
 
-This project is an example on how to manually consume a COM server from C# or a C# server from COM client.
+This project is an example on how to manually consume a COM server from C# or a C# server from COM client. It also contains projects for less common scenarios involving .NET and COM.
 
 Running COM server with Net client example:
 
-1) Load ComInterop.sln in Visual Studio
+1) Load `ComInterop.sln` in Visual Studio
 2) Build desired solution configuration (e.g. `Debug|x86`)
 3) Register the COM server (i.e. `ComServer.dll`) using `regsvr32.exe` from an elevated command prompt
     * `regsvr32.exe ComServer.dll`
@@ -15,7 +15,7 @@ When done with the project, remember to unregister the COM server with `regsvr32
 
 Running Net server with COM client example:
 
-1) Load ComInterop.sln in Visual Studio
+1) Load `ComInterop.sln` in Visual Studio
 2) Build desired solution configuration (e.g. `Debug|x86`)
 3) Register the Net server (i.e. `NetServer.dll`) using `regasm.exe` from an elevated command prompt
     * `regasm.exe NetServer.dll /codebase`
@@ -29,7 +29,7 @@ Projects demonstrating Registration Free (RegFree) COM are also included.
 
 Running the RegFree COM server with Net client example:
 
-1) Load ComInterop.sln in Visual Studio
+1) Load `ComInterop.sln` in Visual Studio
 2) Build desired solution configuration (e.g. `Debug|x86`)
     * The current solution only supports the "F5" experience for the `AnyCPU` and `x86` platforms in RegFree COM.
 3) Set the `NetClient_RegFree` project as the StartUp project
@@ -37,13 +37,26 @@ Running the RegFree COM server with Net client example:
 
 Running the RegFree Net server with COM client example:
 
-1) Load ComInterop.sln in Visual Studio
+1) Load `ComInterop.sln` in Visual Studio
 2) Build desired solution configuration (e.g. `Debug|x86`)
 3) Set the `ComClient_RegFree` project as the StartUp project
 4) Press "F5" from within Visual Studio to debug
 
+Running the Out-of-proc demo:
+
+1) Load the `ComInterop.sln` in Visual Studio
+2) Build desired solution configuration (e.g. `Debug|x86`)
+3) Set the `OutOfProcDemo` project as the StartUp project
+4) Press "F5" from within Visual Studio to debug
+
+**Note** The Out-of-proc demo launches a child process from the main process.
+
 ## References
 
-[RegFree COM Walkthrough](https://msdn.microsoft.com/en-us/library/ms973913.aspx)
+[RegFree COM Walkthrough](https://msdn.microsoft.com/library/ms973913.aspx)
 
-[RegFree COM with .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/interop/configure-net-framework-based-com-components-for-reg)
+[RegFree COM with .NET Framework](https://docs.microsoft.com/dotnet/framework/interop/configure-net-framework-based-com-components-for-reg)
+
+[Running Object Table](https://docs.microsoft.com/windows/desktop/api/objidl/nn-objidl-irunningobjecttable)
+
+[Type Libraries](https://msdn.microsoft.com/library/windows/desktop/ms221060.aspx)
