@@ -2,13 +2,8 @@
 
 #include <Windows.h>
 #include <atlbase.h>
+#include "IServer_h.h"
 
-// IServer definition
-DECLARE_INTERFACE_IID_(IServer, IUnknown, "F38720E5-2D64-445E-88FB-1D696F614C78")
-{
-    // Compute and return the value of PI
-    STDMETHOD(ComputePi)(_Out_ double *pi) PURE;
-};
 
 // Server implementation of IServer
 class DECLSPEC_UUID("114383E9-1969-47D2-9AA9-91388C961A19") Server : IServer
