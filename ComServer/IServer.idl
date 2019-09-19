@@ -1,0 +1,8 @@
+import "oaidl.idl";
+
+[object,
+ uuid(F38720E5-2D64-445E-88FB-1D696F614C78)]
+interface IServer : IUnknown {
+    [helpstring("Compute and return the value of PI")]
+    HRESULT ComputePi ([out,retval] double * pi);
+};

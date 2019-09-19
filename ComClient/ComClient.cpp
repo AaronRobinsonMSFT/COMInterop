@@ -1,17 +1,10 @@
 ﻿#include "stdafx.h"
 #include <Windows.h>
 #include <atlbase.h>
+#include "../ComServer/IServer_h.h"
 
 using namespace ATL;
 
-// IServer definition
-DECLARE_INTERFACE_IID_(IServer, IUnknown, "F38720E5-2D64-445E-88FB-1D696F614C78")
-{
-    // Compute and return the value of PI
-    STDMETHOD(ComputePi)(_Out_ double *pi) PURE;
-};
-
-const IID IID_IServer = __uuidof(IServer);
 
 // {114383E9-1969-47D2-9AA9-91388C961A19}
 const CLSID CLSID_Server = { 0x114383E9, 0x1969, 0x47D2, { 0x9A, 0xA9, 0x91, 0x38, 0x8C, 0x96, 0x1A, 0x19 } };
@@ -19,7 +12,7 @@ const CLSID CLSID_Server = { 0x114383E9, 0x1969, 0x47D2, { 0x9A, 0xA9, 0x91, 0x3
 HRESULT QueryServer()
 {
     CComPtr<IServer> server;
-    HRESULT hr = ::CoCreateInstance(CLSID_Server, nullptr, CLSCTX_INPROC, IID_IServer, (void**)&server);
+    HRESULT hr = ::CoCreateInstance(CLSID_Server, nullptr, CLSCTX_INPROC, __uuidof(IServer), (void**)&server);
     if (FAILED(hr))
         return hr;
 
