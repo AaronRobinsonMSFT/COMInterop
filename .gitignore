@@ -6,3 +6,7 @@ x64/
 **/bin/
 **/obj/
 **/*.user
+
+# IDL generated code
+ComServer/IServer_*
+ComServer/dlldata.c
