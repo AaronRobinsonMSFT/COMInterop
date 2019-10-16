@@ -1,20 +1,11 @@
-﻿namespace OutOfProcDemo
+﻿using IServerLib;
+
+namespace OutOfProcDemo
 {
     using System;
     using System.Diagnostics;
     using System.Reflection;
     using System.Runtime.InteropServices;
-
-    /// <summary>
-    /// Managed definition of COM interface
-    /// </summary>
-    [ComImport]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [Guid("F38720E5-2D64-445E-88FB-1D696F614C78")]
-    internal interface IServer
-    {
-        double ComputePi();
-    }
 
     class Program
     {
@@ -56,7 +47,7 @@
 
                     // Acquire remote object
                     object remoteObject = rot.GetObject(remoteObjectName);
-                    var server = (OutOfProcDemo.IServer)remoteObject;
+                    var server = (IServer)remoteObject;
 
                     Log("Calling remote object...");
                     var pi = server.ComputePi();
