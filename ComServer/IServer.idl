@@ -9,3 +9,13 @@ interface IServer : IUnknown
     [helpstring("Compute and return the value of PI")]
     HRESULT ComputePi([out,retval] double * pi);
 };
+
+
+[
+    uuid(6F994E4B-455D-4CE1-B7E9-9B135FA021D5),
+    helpstring("IServer type library")
+]
+library IServerLib
+{
+    interface IServer;
+};

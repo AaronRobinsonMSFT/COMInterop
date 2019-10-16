@@ -1,15 +1,9 @@
-﻿namespace NetServer
+﻿using IServerLib;
+
+namespace NetServer
 {
     using System;
     using System.Runtime.InteropServices;
-
-    [ComVisible(true)]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [Guid("F38720E5-2D64-445E-88FB-1D696F614C78")]
-    public interface IServer
-    {
-        double ComputePi();
-    }
 
     [ComVisible(true)]
     [Guid("114383E9-1969-47D2-9AA9-91388C961A19")]

@@ -1,18 +1,9 @@
-﻿namespace NetClient
+﻿using IServerLib;
+
+namespace NetClient
 {
     using System;
     using System.Runtime.InteropServices;
-
-    /// <summary>
-    /// Managed definition of COM interface
-    /// </summary>
-    [ComImport]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [Guid("F38720E5-2D64-445E-88FB-1D696F614C78")]
-    internal interface IServer
-    {
-        double ComputePi();
-    }
 
 #pragma warning disable IDE1006 // Naming Styles
     /// <summary>

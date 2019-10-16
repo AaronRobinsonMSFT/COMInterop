@@ -95,6 +95,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>Exports.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>TlbImp.exe /machine:x86 "$(IntDir)$(TargetName).tlb" /out:$(OutDir)IServerLib.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -109,6 +112,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>Exports.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>TlbImp.exe /machine:x64 "$(IntDir)$(TargetName).tlb" /out:$(OutDir)IServerLib.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -127,6 +133,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>Exports.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>TlbImp.exe /machine:x86 "$(IntDir)$(TargetName).tlb" /out:$(OutDir)IServerLib.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -145,6 +154,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>Exports.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>TlbImp.exe /machine:x64 "$(IntDir)$(TargetName).tlb" /out:$(OutDir)IServerLib.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ComServer.h" />
